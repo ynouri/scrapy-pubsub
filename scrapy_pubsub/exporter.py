@@ -2,5 +2,5 @@
 # pylint: disable=too-few-public-methods
 
 
-class ScrapyPubSub:
+class PubSubItemExporter:
     """Exporter"""

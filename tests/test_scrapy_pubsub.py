@@ -1,8 +1,8 @@
 """Tests for the Scrapy Pub/Sub extension"""
-from scrapy_pubsub.scrapy_pubsub import ScrapyPubSub
+from scrapy_pubsub import PubSubItemExporter
 
 
 def test_object():
     """Test that the class can be instantiated."""
-    obj = ScrapyPubSub()
+    obj = PubSubItemExporter()
     assert obj

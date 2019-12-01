@@ -4,8 +4,11 @@ from setuptools import setup, find_packages
 INSTALL_REQUIRES = ["scrapy", "google-cloud-pubsub"]
 
 EXTRAS_REQUIRE = {
-    "dev": ["pytest", "pytest-clarity", "black", "flake8", "pylint"]
+    "test": ["pytest", "pytest-clarity", "black", "flake8", "pylint"],
+    "dev": ["tox"],
 }
+
+EXTRAS_REQUIRE["dev"] += EXTRAS_REQUIRE["test"]
 
 setup(
     name="scrapy-pubsub",

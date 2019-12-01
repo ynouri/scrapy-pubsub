@@ -35,8 +35,8 @@ Google's [Cloud Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator)
 
 The following Github actions are used:
 
-- https://github.com/GoogleCloudPlatform/github-actions/tree/master/setup-gcloud
-- https://github.com/actions/setup-java
+- [setup-gcloud](https://github.com/GoogleCloudPlatform/github-actions/tree/master/setup-gcloud)
+- [setup-java](https://github.com/actions/setup-java)
 
 For `setup-gcloud`, the creation of a dummy service account was necessary. The following steps were used:
 
@@ -57,4 +57,12 @@ gcloud iam service-accounts keys create ./key.json \
   --iam-account ${SERVICE_ACCOUNT}@${PROJECT}.iam.gserviceaccount.com \
   --key-file-type=json
 cat key.json | base64
+```
+
+## Development
+
+To install the dependencies:
+
+```
+pip install -e .[dev]
 ```
