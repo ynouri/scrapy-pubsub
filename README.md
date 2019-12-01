@@ -1,10 +1,31 @@
 # Scrapy Pub/Sub
 
-`scrapy-pubsub` is a scrapy extension which writes crawled items to Cloud Pub/Sub. It is based on [Google's Python client for Cloud Pub/Sub](https://googleapis.dev/python/pubsub/latest/), and takes inspiration from Mikhail Korobov's [scrapy-kafka-export](https://github.com/TeamHG-Memex/scrapy-kafka-export).
+`scrapy-pubsub` is a scrapy extension which writes crawled items to Cloud Pub/Sub.
+
+It is based on [Google's Python client for Cloud Pub/Sub](https://googleapis.dev/python/pubsub/latest/).
 
 ## Install
 
 PyPI package coming soon.
+
+## Reference
+
+### Scrapy documentation
+
+- [Item exporters](https://docs.scrapy.org/en/latest/topics/exporters.html)
+- [Feed exports](https://docs.scrapy.org/en/latest/topics/feed-exports.html)
+- [Extensions](https://docs.scrapy.org/en/latest/topics/extensions.html)
+- [Core API](https://docs.scrapy.org/en/latest/topics/api.html)
+- [Run from a script](https://docs.scrapy.org/en/latest/topics/practices.html#run-scrapy-from-a-script)
+
+### Community item exporters
+
+- [Scrapy Kafka item exporter](https://github.com/TeamHG-Memex/scrapy-kafka-export)
+- [Scrapy SQLite item exporter](https://github.com/RockyZ/Scrapy-sqlite-item-exporter)
+
+### Stack overflow
+
+- [How to create a custom Scrapy item exporter?](https://stackoverflow.com/questions/33290876/how-to-create-custom-scrapy-item-exporter)
 
 ## Tests
 

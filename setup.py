@@ -1,7 +1,7 @@
 """Setup.py"""
 from setuptools import setup, find_packages
 
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = ["scrapy", "google-cloud-pubsub"]
 
 EXTRAS_REQUIRE = {
     "dev": ["pytest", "pytest-clarity", "black", "flake8", "pylint"]
