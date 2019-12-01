@@ -13,32 +13,47 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      # Setup Java
       - uses: actions/setup-java@v1
         with:
           java-version: "11.0.3" # The JDK version to make available on the path. Takes a whole or semver JDK version, or 1.x syntax (e.g. 1.8 => Jdk 8.x). To specify a specific version for JDK 8 or older use the following pattern (8.0.x)
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64 # (x64 or x86) - defaults to x64
-
       - run: java --version
 
+      # Setup gcloud
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: "272.0.0"
+          # service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          # service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - run: gcloud info
+
+      # Setup Python
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+
+      # Build & test suite
+      - name: build
         run: |
           python -m pip install --upgrade pip
           pip install tox
           tox --notest --recreate -e py
-      - name: Flake8
+
+      - name: flake8
         run: |
           tox -e flake8
-      - name: Pylint
+
+      - name: pylint
         run: |
           tox -e pylint
-      - name: Black
+
+      - name: black
         run: |
           tox -e black
-      - name: Pytest
+
+      - name: pytest
         run: |
           tox -e py
