@@ -28,6 +28,11 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - run: gcloud info
+      - run: gcloud components install pubsub-emulator
+
+      # Run emulator
+      - run: |
+          gcloud beta emulators pubsub start --project=dummy-project &
 
       # Setup Python
       - name: Set up Python ${{ matrix.python-version }}
