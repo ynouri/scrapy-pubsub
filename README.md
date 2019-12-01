@@ -1,19 +1,23 @@
 # Scrapy Pub/Sub
 
-Scrapy extension which writes crawled items to Cloud Pub/Sub.
+`scrapy-pubsub` is a scrapy extension which writes crawled items to Cloud Pub/Sub. It is based on [Google's Python client for Cloud Pub/Sub](https://googleapis.dev/python/pubsub/latest/), and takes inspiration from Mikhail Korobov's [scrapy-kafka-export](https://github.com/TeamHG-Memex/scrapy-kafka-export).
+
+## Install
+
+PyPI package coming soon.
 
 ## Tests
 
-[Cloud Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator) provided by Google is used for integration tests.
+Google's [Cloud Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator) is used for integration tests.
 
-## Github workflow
+## CI
 
 The following Github actions are used:
 
 - https://github.com/GoogleCloudPlatform/github-actions/tree/master/setup-gcloud
 - https://github.com/actions/setup-java
 
-For `setup-gcloud`, the creation of a dummy service account was necessary.
+For `setup-gcloud`, the creation of a dummy service account was necessary. The following steps were used:
 
 ```bash
 # Create account
