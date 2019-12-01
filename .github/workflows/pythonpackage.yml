@@ -28,7 +28,7 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - run: gcloud info
-      - run: gcloud components install pubsub-emulator -q
+      - run: gcloud components install pubsub-emulator beta -q
 
       # Run emulator
       - run: |
