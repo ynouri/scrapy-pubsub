@@ -27,6 +27,7 @@ jobs:
           version: "272.0.0"
           # service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           # service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account_key: dummy-sa-key
       - run: gcloud info
 
       # Setup Python
