@@ -1,0 +1,3 @@
+[BASIC]
+good-names=i,j,k,n,_
+disable=fixme,bad-continuation
