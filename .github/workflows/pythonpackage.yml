@@ -43,25 +43,32 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # Build & test suite
-      - name: build
+      # Test suite
+      - name: Create Tox virtual environment
         run: |
           python -m pip install --upgrade pip
           pip install tox
           tox --notest --recreate -e py
 
-      - name: flake8
-        run: |
-          tox -e flake8
+      - name: Flake8
+        run: tox -e flake8
 
-      - name: pylint
-        run: |
-          tox -e pylint
+      - name: Pylint
+        run: tox -e pylint
 
-      - name: black
-        run: |
-          tox -e black
+      - name: Black
+        run: tox -e black
 
-      - name: pytest
-        run: |
-          tox -e py
+      - name: Pytest
+        run: tox -e py
+
+      # Publish package
+      - name: Build wheel
+        run: python setup.py bdist_wheel
+
+      - name: Publish to PyPI
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
