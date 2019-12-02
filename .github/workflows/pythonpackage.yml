@@ -64,7 +64,9 @@ jobs:
 
       # Publish package
       - name: Build wheel
-        run: python setup.py bdist_wheel
+        run:
+          - pip install setuptools --upgrade
+          - python setup.py bdist_wheel
 
       - name: Publish to PyPI
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')

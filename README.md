@@ -6,7 +6,9 @@ It is based on [Google's Python client for Cloud Pub/Sub](https://googleapis.dev
 
 ## Install
 
-PyPI package coming soon.
+```bash
+pip install scrapy-pubsub
+```
 
 ## How to use
 
