@@ -1,5 +1,7 @@
 """
-Runs a Scrapy crawler with the PubSubItemPipeline.
+Integration test: runs a Scrapy crawler with the PubSubItemPipeline. The
+PubSubItemPipeline publishes to a Pub/Sub emulator running locally. The results
+are read back from Pub/Sub and verified.
 
 To run locally the Google Cloud Pub/Sub emulator use:
 ```
@@ -11,12 +13,11 @@ gcloud beta emulators pubsub start \
 ```
 """
 # pylint: disable=redefined-outer-name
+import json
 from scrapy.crawler import CrawlerProcess
 from scrapy.spiders import Spider
-from scrapy.settings import Settings
-from google.cloud import pubsub_v1
-from google.api_core.exceptions import AlreadyExists
-from tests.settings import PUBSUB_PROJECT_ID, PUBSUB_TOPIC
+import pytest
+from tests.pubsub_config import PubSubConfiguration
 
 
 class MockSpider(Spider):
@@ -28,6 +29,7 @@ class MockSpider(Spider):
 
     def parse(self, response):
         """Parse quotes from toscrape.com"""
+        # TODO: actually mock toscrape.com responses
         for quote in response.css("div.quote"):
             yield {
                 "text": quote.css("span.text::text").get(),
@@ -36,49 +38,46 @@ class MockSpider(Spider):
             }
 
 
-def _settings():
-    """Scrapy settings instantiated from tests/settings.py."""
-    settings = Settings()
-    settings_module_path = "tests.settings"
-    settings.setmodule(settings_module_path, priority="project")
-    return settings
+@pytest.fixture(scope="module")
+def pubsub():
+    """Pub/Sub config fixture."""
+    return PubSubConfiguration()
 
 
-def test_settings_are_read():
+@pytest.fixture(scope="module")
+def settings(pubsub):
+    """Settings fixture."""
+    return pubsub.scrapy_settings()
+
+
+def test_settings_are_read(settings):
     """Test if the Scrapy settings are correctly read."""
-    settings = _settings()
     item_pipelines = settings.getdict("ITEM_PIPELINES")
     project_id = settings.get("PUBSUB_PROJECT_ID")
     topic = settings.get("PUBSUB_TOPIC")
     assert item_pipelines == {"scrapy_pubsub.PubSubItemPipeline": 100}
-    assert project_id == PUBSUB_PROJECT_ID
-    assert topic == PUBSUB_TOPIC
+    assert project_id == "test-project"
+    assert "test-topic" in topic
 
 
-def test_crawler(monkeypatch):
+def test_crawler(pubsub, settings):
     """Test that the crawler process publishes to Pub/Sub."""
-    monkeypatch.setenv("PUBSUB_EMULATOR_HOST", "localhost:8085")
-    monkeypatch.setenv("PUBSUB_PROJECT_ID", "test-project")
-    _create_topic()
-    _start_crawler_process()
-
-
-def _create_topic():
-    try:
-        publisher = pubsub_v1.PublisherClient()
-        topic_path = publisher.topic_path(PUBSUB_PROJECT_ID, PUBSUB_TOPIC)
-        publisher.create_topic(topic_path)
-    except AlreadyExists:
-        pass
-
-
-def _start_crawler_process():
-    """Start a crawler process."""
-    process = CrawlerProcess(_settings())
+    # Crawl
+    process = CrawlerProcess(settings)
     process.crawl(MockSpider)
     process.start()
-
-
-if __name__ == "__main__":
-    _create_topic()
-    _start_crawler_process()
+    # Synchronously pull results from subscription
+    response = pubsub.subscriber.pull(pubsub.sub_path, max_messages=100)
+    msgs = response.received_messages
+    data = [json.loads(msg.message.data.decode("utf-8")) for msg in msgs]
+    ack_ids = [msg.ack_id for msg in msgs]
+    pubsub.subscriber.acknowledge(pubsub.sub_path, ack_ids)
+    assert len(data) == 10
+    assert data[0] == {
+        "author": "Albert Einstein",
+        "tags": ["change", "deep-thoughts", "thinking", "world"],
+        "text": (
+            "“The world as we have created it is a process of our thinking. It"
+            " cannot be changed without changing our thinking.”"
+        ),
+    }

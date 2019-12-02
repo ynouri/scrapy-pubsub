@@ -3,4 +3,4 @@ good-names=i,j,k,n,_,logger
 disable=fixme,bad-continuation,logging-format-interpolation
 
 [TYPECHECK]
-ignored-classes=PublisherClient
+ignored-classes=PublisherClient,SubscriberClient
