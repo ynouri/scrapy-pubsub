@@ -12,7 +12,7 @@ EXTRAS_REQUIRE["dev"] += EXTRAS_REQUIRE["test"]
 
 setup(
     name="scrapy-pubsub",
-    version="0.0.2",
+    version="0.0.3",
     description="Scrapy item pipeline for Cloud Pub/Sub.",
     author="Yacine Nouri",
     author_email="yacine@nouri.io",
