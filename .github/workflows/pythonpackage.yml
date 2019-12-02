@@ -63,14 +63,12 @@ jobs:
         run: tox -e py
 
       # Publish package
-      - name: Build wheel
-        run:
-          - pip install setuptools --upgrade
-          - python setup.py bdist_wheel
-
-      - name: Publish to PyPI
+      - name: Publish wheel to PyPI
         if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
+        run: |
+          pip install twine setuptools wheel --upgrade
+          python setup.py bdist_wheel
+          twine upload dist/*.whl
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.pypi_all_projects }}

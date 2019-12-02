@@ -1,6 +1,6 @@
 # Scrapy Pub/Sub
 
-`scrapy-pubsub` is a scrapy extension which writes crawled items to Cloud Pub/Sub.
+`scrapy-pubsub` is a Scrapy item pipeline which writes crawled items to Cloud Pub/Sub.
 
 It is based on [Google's Python client for Cloud Pub/Sub](https://googleapis.dev/python/pubsub/latest/).
 
