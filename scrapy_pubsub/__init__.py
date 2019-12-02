@@ -1,4 +1,4 @@
 """Scrapy Pubsub package __init__.py"""
-from .exporter import PubSubItemExporter
+from .pipeline import PubSubItemPipeline
 
-__all__ = ["PubSubItemExporter"]
+__all__ = ["PubSubItemPipeline"]

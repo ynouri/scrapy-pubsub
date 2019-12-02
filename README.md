@@ -8,6 +8,10 @@ It is based on [Google's Python client for Cloud Pub/Sub](https://googleapis.dev
 
 PyPI package coming soon.
 
+## How to use
+
+Coming soon.
+
 ## Design
 
 There were at least 4 different approaches possible for integrating Cloud Pub/Sub within the Scrapy framework and APIs.

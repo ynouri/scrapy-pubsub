@@ -1,8 +1,6 @@
 """Scrapy settings for integration test."""
 
-FEED_EXPORTERS = {
-    "pubsub": "scrapy_pubsub.PubSubItemExporter",
-}
+ITEM_PIPELINES = {"scrapy_pubsub.PubSubItemPipeline": 100}
 
 PUBSUB_PROJECT_ID = "test-project"
 PUBSUB_TOPIC = "test-topic"
