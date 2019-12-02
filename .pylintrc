@@ -1,3 +1,6 @@
 [BASIC]
 good-names=i,j,k,n,_,logger
-disable=fixme,bad-continuation
+disable=fixme,bad-continuation,logging-format-interpolation
+
+[TYPECHECK]
+ignored-classes=PublisherClient

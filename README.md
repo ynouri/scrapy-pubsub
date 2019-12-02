@@ -10,7 +10,15 @@ PyPI package coming soon.
 
 ## How to use
 
-Coming soon.
+Add the following in your Scrapy `settings.py`:
+
+```python
+ITEM_PIPELINES = {
+  "scrapy_pubsub.PubSubItemPipeline": 100
+}
+PUBSUB_PROJECT_ID = "my-project-id"
+PUBSUB_TOPIC = "my-topic"
+```
 
 ## Design
 

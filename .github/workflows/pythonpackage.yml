@@ -31,8 +31,11 @@ jobs:
       - run: gcloud components install pubsub-emulator beta -q
 
       # Run emulator
-      - run: |
-          gcloud beta emulators pubsub start --project=dummy-project &
+      - name: pubsub-emulator
+        run: gcloud beta emulators pubsub start --project=${PUBSUB_PROJECT_ID} --host-port=${PUBSUB_EMULATOR_HOST} &
+        env:
+          PUBSUB_EMULATOR_HOST: localhost:8085
+          PUBSUB_PROJECT_ID: test-project
 
       # Setup Python
       - name: Set up Python ${{ matrix.python-version }}

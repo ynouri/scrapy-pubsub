@@ -1,6 +1,8 @@
 """Scrapy Item Pipeline for Cloud Pub/Sub"""
 # pylint: disable=too-few-public-methods
 import logging
+import json
+from google.cloud import pubsub_v1
 from scrapy.exceptions import NotConfigured
 
 logger = logging.getLogger(__name__)
@@ -13,6 +15,9 @@ class PubSubItemPipeline:
         """Init"""
         self.project_id = project_id
         self.topic = topic
+        self.publisher = None
+        self.topic_path = None
+        self.futures = []
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -25,14 +30,23 @@ class PubSubItemPipeline:
             raise NotConfigured
         return cls(project_id, topic)
 
-    def open_spider(self, spider):
-        """Open the Pub/Sub topic"""
+    def open_spider(self, _):
+        """Creater the Pub/Sub client."""
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = self.publisher.topic_path(
+            self.project_id, self.topic
+        )
 
-    def close_spider(self, spider):
-        """Close the Pub/Sub topic"""
+    def close_spider(self, _):
+        """Ensure that all futures returned with a result."""
+        for future in self.futures:
+            future.result()
 
     # pylint: disable=no-self-use
     def process_item(self, item, _):
         """Publish a scraped item to Pub/Sub"""
-        print("Item processed!!!!")
+        data = json.dumps(item).encode("utf-8")
+        logger.debug(f"Publishing to Pub/Sub topic {self.topic}.")
+        future = self.publisher.publish(self.topic_path, data)
+        self.futures.append(future)
         return item
